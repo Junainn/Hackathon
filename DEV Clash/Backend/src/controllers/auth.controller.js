@@ -46,7 +46,7 @@ export const userRegister = async (req, res,next) => {
 
         await newUser.save();
         const token = generateToken(newUser._id, newUser.role, res);
-        console.log("User registered successfully:", newUser);
+        //console.log("User registered successfully:", newUser);
         res.status(201).json({ success: true, message: "User registered successfully" });
     }
     catch(err){
