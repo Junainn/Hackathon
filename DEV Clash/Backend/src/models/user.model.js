@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     // CUET student email format validation regex
-    match: [/^u\d{7}@student\.cuet\.ac\.bd$/, 'Invalid CUET student email format.']
+   // match: [/^u\d{7}@student\.cuet\.ac\.bd$/, 'Invalid CUET student email format.']
   },
   password: { type: String, required: true },
   role: { type: String, enum: ['student', 'vendor'], required: true },
