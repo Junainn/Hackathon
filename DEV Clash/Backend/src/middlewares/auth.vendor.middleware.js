@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
 import User from "../models/user.model.js";
-
-export const authMiddleware = async (req, res, next) => {
+import Vendor from "../models/vendor.model.js";
+export const authVendorMiddleware = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
     if (!token) {
@@ -19,8 +19,8 @@ export const authMiddleware = async (req, res, next) => {
       return next(error);
     }
 
-    const userId = decoded.id;  // make sure token payload uses 'id'
-    const user = await User.findOne({ _id: userId, role: "vendor" }).select("-password -__v");
+    const vendorId = decoded.id;  // make sure token payload uses 'id'
+    const user = await Vendor.findOne({ _id: vendorId }).select("-password -__v");
 
     if (!user) {
       const error = new Error("Unauthorized - User not found");

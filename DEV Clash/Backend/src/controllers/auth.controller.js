@@ -1,11 +1,12 @@
 import User from "../models/user.model.js";
+import Vendor from "../models/vendor.model.js";
 import bcrypt from "bcrypt";
 
 
 import { validateEmail } from "../utils/validate.utils.js";
 import { generateToken } from "../utils/generateToken.js";
 export const userRegister = async (req, res,next) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, shopName } = req.body;
     try{
         // Validate input
         if (!name || !email || !password || !role) {
@@ -32,7 +33,10 @@ export const userRegister = async (req, res,next) => {
                 error.statusCode = 400;
                 throw error;
             }
+            const token = generateToken(newUser._id, newUser.role, res);
         }
+        
+        
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -45,7 +49,14 @@ export const userRegister = async (req, res,next) => {
         });
 
         await newUser.save();
-        const token = generateToken(newUser._id, newUser.role, res);
+        let vendorId;
+        
+         if (role === 'vendor') {
+            const vendor = new Vendor({ user: newUser._id, name: shopName || name });
+            vendorId = vendor._id;
+            const token = generateToken(vendorId, newUser.role, res);
+            await vendor.save();
+        }
         //console.log("User registered successfully:", newUser);
         res.status(201).json({ success: true, message: "User registered successfully" });
     }
@@ -81,7 +92,15 @@ export const userLogin = async (req, res, next) => {
         }
 
         // Generate token
-        const token = generateToken(user._id, user.role, res);
+        
+        if (user.role === 'vendor') {
+            const vendor = await Vendor.findOne({ user: user._id });
+            const token = generateToken(vendor._id, user.role, res);
+            
+        }
+        else{
+            const token = generateToken(user._id, user.role, res);
+        }
         console.log("User logged in successfully:", user);
         res.status(200).json({ success: true, message: "User logged in successfully", token });
     } catch (err) {
