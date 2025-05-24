@@ -13,7 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser()); 
 
 app.use('/api/auth',authRoutes);
-app.use('/api/vendor',vendorRoutes);
+app.use('/api/vendors',vendorRoutes);
 app.use('/api/vendor/menu',menuRoutes);
 
 app.use(errorhandler);

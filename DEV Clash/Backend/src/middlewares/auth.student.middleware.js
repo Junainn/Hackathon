@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
 import User from "../models/user.model.js";
 
-export const authMiddleware = async (req, res, next) => {
+export const authStudentMiddleware = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
     if (!token) {
