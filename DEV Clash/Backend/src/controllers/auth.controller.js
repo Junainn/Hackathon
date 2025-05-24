@@ -94,14 +94,14 @@ export const userLogin = async (req, res, next) => {
         }
 
         // Generate token
-        
+        let token;
         if (user.role === 'vendor') {
             const vendor = await Vendor.findOne({ user: user._id });
-            const token = generateToken(vendor._id, user.role, res);
+             token = generateToken(vendor._id, user.role, res);
             
         }
         else{
-            const token = generateToken(user._id, user.role, res);
+            token = generateToken(user._id, user.role, res);
         }
         console.log("User logged in successfully:", user);
         res.status(200).json({ success: true, message: "User logged in successfully", token });
