@@ -26,6 +26,14 @@ export const userRegister = async (req, res,next) => {
             error.statusCode = 400;
             throw error;
         }
+        // Create new user
+         const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            role
+        });
         if(role==='student'){
             // Validate CUET student email format
             if (!validateEmail(role, email)) {
@@ -38,15 +46,9 @@ export const userRegister = async (req, res,next) => {
         
         
         // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+       
 
-        // Create new user
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword,
-            role
-        });
+        
 
         await newUser.save();
         let vendorId;
