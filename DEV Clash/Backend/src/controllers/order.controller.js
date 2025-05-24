@@ -38,3 +38,24 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
+export const getStudentOrders = async (req, res, next) => {
+  try {
+    const studentId = req.user._id; // From auth middleware
+    const orders = await Order.find({ student: studentId }).populate('vendor', 'name');
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No orders found for this student'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders fetched successfully',
+      data: orders
+    });
+  } catch (err) {
+    next(err);
+  }
+}

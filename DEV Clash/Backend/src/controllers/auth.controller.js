@@ -60,7 +60,7 @@ export const userRegister = async (req, res,next) => {
             await vendor.save();
         }
         //console.log("User registered successfully:", newUser);
-        res.status(201).json({ success: true, message: "User registered successfully" });
+        res.status(201).json({ success: true, message: "User registered successfully",user: {_id:newUser._id,name:newUser.name,email:newUser.email,role:newUser.role}});
     }
     catch(err){
         next(err);
@@ -104,7 +104,7 @@ export const userLogin = async (req, res, next) => {
             token = generateToken(user._id, user.role, res);
         }
         console.log("User logged in successfully:", user);
-        res.status(200).json({ success: true, message: "User logged in successfully", token });
+        res.status(200).json({ success: true, message: "User logged in successfully", token,user:{_id:user._id,name:user.name,email:user.email,role:user.role} });
     } catch (err) {
         next(err);
     }
