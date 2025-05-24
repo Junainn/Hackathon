@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* You can add any global custom CSS here that Tailwind doesn't cover */
+body {
+  font-family: 'Inter', sans-serif; /* Using the Inter font imported in index.html */
+}
