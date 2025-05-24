@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import LoadingSpinner from '../components/LoadingSpinner';
-import vendorService from '../services/vendorService';
+import vendorService from '../services/vendorService.jsx';
 import studentService from '../services/studentService'; // To fetch current vendor's menu
 import { useAuth } from '../hooks/useAuth.jsx'; // Get current vendor ID
 
@@ -21,6 +21,7 @@ const MenuManagementPage = () => {
   // Fetch initial menu items for the vendor
   useEffect(() => {
     const fetchMenu = async () => {
+      
       if (!user?._id) return;
       setLoading(true);
       setError('');
@@ -28,15 +29,15 @@ const MenuManagementPage = () => {
         // In a real app, vendorService would have a getMyMenu()
         // For mock, we'll use studentService to get the mock menu by vendor ID
         const data = await studentService.getVendorMenu(user._id);
-        setMenuItems(data);
+        // setMenuItems(data);
       } catch (err) {
         setError(err.message || 'Failed to load menu items.');
       } finally {
         setLoading(false);
       }
     };
-    fetchMenu();
-  }, [user]);
+    // fetchMenu();
+  }, []);
 
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

@@ -3,9 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { isValidCUETEmail } from '../utils/validators';
-import Header from '../components/Header'; // Import Header
-import Footer from '../components/Footer'; // Import Footer
+// import { isValidCUETEmail } from '../utils/validators';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -21,10 +21,10 @@ const RegisterPage = () => {
     e.preventDefault();
     setError('');
 
-    if (role === 'student' && !isValidCUETEmail(email)) {
-      setError('Student email must be in CUET format (e.g., your.name@cuet.ac.bd)');
-      return;
-    }
+    // if (role === 'student' && !isValidCUETEmail(email)) {
+    //   setError('Student email must be in CUET format (e.g., your.name@cuet.ac.bd)');
+    //   return;
+    // }
 
     setLoading(true);
     try {
@@ -35,16 +35,17 @@ const RegisterPage = () => {
         navigate('/vendor/dashboard');
       }
     } catch (err) {
-      setError(err || 'Registration failed. Please try again.');
+      // FIX: Ensure 'err' is always treated as a string message for rendering
+      setError(err.message || err || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100"> {/* Full screen, column layout */}
-      <Header /> {/* Include Header */}
-      <main className="flex-grow flex items-center justify-center p-4"> {/* Main content area, centered */}
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Header />
+      <main className="flex-grow flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
           <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Register</h2>
           <form onSubmit={handleSubmit}>
@@ -65,7 +66,7 @@ const RegisterPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your.name@cuet.ac.bd"
               required
-              error={role === 'student' && email && !isValidCUETEmail(email) ? 'Must be a CUET email' : ''}
+              error={role === 'student' ? 'Must be a CUET email' : ''}
             />
             <Input
               label="Password"
@@ -90,7 +91,7 @@ const RegisterPage = () => {
                 <option value="vendor">Vendor</option>
               </select>
             </div>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+            {error && <p className="text-red-500 text-sm mb-4">{error.message || error}</p>} {/* FIX: Render error.message or error */}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Registering...' : 'Register'}
             </Button>
@@ -100,7 +101,7 @@ const RegisterPage = () => {
           </p>
         </div>
       </main>
-      <Footer /> {/* Include Footer */}
+      <Footer />
     </div>
   );
 };

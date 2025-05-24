@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import LoadingSpinner from '../components/LoadingSpinner';
 import OrderListItem from '../components/OrderListItem'; // Re-use OrderListItem
-import vendorService from '../services/vendorService';
+import vendorService from '../services/vendorService.jsx';
 
 const OrderManagementPage = () => {
   const [orders, setOrders] = useState([]);

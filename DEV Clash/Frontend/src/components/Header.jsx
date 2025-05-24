@@ -22,7 +22,7 @@ const Header = () => {
           {user ? (
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <span className="text-lg">Welcome, {user.name} ({user.role})</span>
-              <Button onClick={handleLogout} variant="danger" className="w-full sm:w-auto">
+              <Button onClick={()=> handleLogout()} variant="danger" className="w-full sm:w-auto">
                 Logout
               </Button>
             </div>

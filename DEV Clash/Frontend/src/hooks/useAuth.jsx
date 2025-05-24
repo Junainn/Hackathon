@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext, useCallback } from 'react';
-import { getToken, getUser, setUser, removeToken, removeUser } from '../utils/localStorage';
+import { getUser, setUser, removeUser } from '../utils/localStorage';
 import authService from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -9,16 +9,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = getToken();
+    // With backend now sending user data on login/register,
+    // we simply rely on localStorage for initial load.
     const storedUser = getUser();
-    if (token && storedUser) {
-      setUserState(storedUser);
-    }
-    setLoading(false);
+    setUserState(storedUser);
+    setLoading(false); // No need for async call here anymore
   }, []);
 
   const login = useCallback(async (email, password) => {
     try {
+      // authService.login now returns the user object directly
       const loggedInUser = await authService.login(email, password);
       setUserState(loggedInUser);
       return loggedInUser;
@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (name, email, password, role) => {
     try {
+      // authService.register now returns the user object directly
       const registeredUser = await authService.register(name, email, password, role);
       setUserState(registeredUser);
       return registeredUser;
@@ -39,8 +40,8 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = useCallback(() => {
-    authService.logout();
+  const logout = useCallback(async () => {
+    await authService.logout();
     setUserState(null);
   }, []);
 

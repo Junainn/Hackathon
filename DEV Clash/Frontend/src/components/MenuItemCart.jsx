@@ -4,7 +4,8 @@ import Button from './Button';
 const MenuItemCard = ({ item, onAddToCart }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-200">
-      <img src={item.imageUrl || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-40 object-cover" />
+      {/* FIX: Changed item.imageUrl to item.image to match backend response */}
+      <img src={item.image || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-40 object-cover" />
       <div className="p-4">
         <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.name}</h3>
         <p className="text-gray-600 text-sm mb-3">{item.description}</p>
