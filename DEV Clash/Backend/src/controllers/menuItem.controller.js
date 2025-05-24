@@ -54,7 +54,7 @@ export const addMenuItem = async (req, res, next) => {
     });
 
     await newMenuItem.save();
-
+    console.log("Menu item added successfully:", newMenuItem);
     res.status(201).json({
       success: true,
       message: "Menu item added successfully",
@@ -66,3 +66,61 @@ export const addMenuItem = async (req, res, next) => {
   }
 };
 
+
+
+export const updateMenuItem = async (req, res, next) => {
+  try {
+    const vendorId = req.user._id; // from auth middleware
+    const { menuItemId } = req.params;
+    const updateData = req.body;
+
+    // Find the menu item and check ownership
+    const menuItem = await MenuItem.findById(menuItemId);
+
+    if (!menuItem) {
+      return res.status(404).json({ success: false, message: 'Menu item not found' });
+    }
+
+    
+
+    // Update allowed fields
+    Object.assign(menuItem, updateData);
+
+    await menuItem.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Menu item updated successfully',
+      data: menuItem
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+
+export const deleteMenuItem = async (req, res, next) => {
+  try {
+    const vendorId = req.user._id; // from auth middleware
+    const { menuItemId } = req.params;
+
+    const menuItem = await MenuItem.findById(menuItemId);
+
+    if (!menuItem) {
+      return res.status(404).json({ success: false, message: 'Menu item not found' });
+    }
+
+    
+
+    await menuItem.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Menu item deleted successfully'
+    });
+  } catch (err) {
+    next(err);
+  }
+};
